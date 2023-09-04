@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List</title>
+</head>
+<body>
+    <h1>Hochu na dr:</h1>
+    <ul>
+        {{range .Items}}
+            <li>
+                <h2>{{.Text}}</h2>
+                <img src="{{.URL}}" alt="Image">
+
+            </li>
+        {{end}}
+    </ul>
+</body>
+</html>
