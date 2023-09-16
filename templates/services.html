@@ -1,0 +1,35 @@
+{{template "header.html"}}
+    <div class="title filter">
+        <form>
+            <label>
+              <input type="radio" name="filter" value="all" checked> All
+            </label>
+            <label>
+              <input type="radio" name="filter" value="metal"> Metal
+            </label>
+            <label>
+              <input type="radio" name="filter" value="wood"> Wood
+            </label>
+            
+            <label>
+                <input class="form" type="number" name="pricefrom"> Price from
+            </label>
+            <label>
+                <input class="form" type="number" name="priceupto"> Price up to
+            </label>
+            <button class="button text" type="submit">Apply Filter</button>
+          </form>
+    </div>
+        {{range .Items}}
+            <div class="card">
+                <h3>{{ .Title }}</h3>
+                <img src="{{ .ImgURL }}">
+                <p>{{ .Subtitle }}</p>
+                <p class="price">Price: {{ .Price }}$ per workpiece</p>
+                <br />
+                <br />
+                <a href="{{ .URL }}" class="button">Add to order list</a>
+            </div>
+        {{end}}
+{{template "footer.html"}}
+

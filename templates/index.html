@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>List</title>
-</head>
-<body>
-    <h1>Hochu na dr:</h1>
-    <ul>
-        {{range .Items}}
-            <li>
-                <h2>{{.Text}}</h2>
-                <img src="{{.URL}}" alt="Image">
+{{template "header.html"}}
+    <div class="title header">About our company</div>
+    <br />
+    <br />
+    <div class="container">
+        <div class="title">
+        Welcome to Factory CNC Machinery. We are a leading provider of high-quality CNC (Computer Numerical Control) machinery solutions for industries worldwide. With years of experience and a dedication to innovation, we strive to empower businesses with advanced manufacturing technology.
 
-            </li>
-        {{end}}
-    </ul>
-</body>
-</html>
+At Factory CNC Machinery, we understand the importance of precision, efficiency, and productivity in modern manufacturing processes. That's why we offer a wide range of CNC machinery solutions tailored to meet the diverse needs of our customers. Whether you're in the automotive, aerospace, electronics, or any other industry, we have the expertise and machinery to help optimize your production capabilities.
+
+Our team of skilled professionals works closely with clients to understand their specific requirements and deliver customized solutions. From CNC milling machines to CNC lathes, routers, and beyond, we offer cutting-edge machinery that combines accuracy, speed, and versatility. Our products are sourced from trusted manufacturers and undergo rigorous quality checks to ensure exceptional performance and reliability.
+
+At Factory CNC Machinery, we not only provide top-notch machinery but also offer comprehensive after-sales support and training programs. Our knowledgeable technicians are always ready to assist with installation, maintenance, and troubleshooting, ensuring minimal downtime and maximum productivity for your operations.
+
+We take pride in our commitment to customer satisfaction, offering cost-effective solutions without compromising on quality. Whether you're a small business or a large industrial enterprise, we have the right CNC machinery and expertise to help you achieve your manufacturing goals.
+
+Thank you for considering Factory CNC Machinery as your trusted partner. Join us on this journey towards transforming your manufacturing processes. Contact us today to explore how our cutting-edge CNC machinery can drive your business to new heights.  
+        </div>
+    </div>
+{{template "footer.html"}}
+
