@@ -24,10 +24,6 @@ func StartServer() error {
 	})
 
 	items := internal.GetItems()
-	err := internal.InitPages(items)
-	if err != nil {
-		return err
-	}
 
 	for _, v := range items {
 		url := fmt.Sprintf("%v", strings.ReplaceAll(v.Title, " ", "-"))
@@ -36,7 +32,7 @@ func StartServer() error {
 	}
 
 	r.LoadHTMLGlob("templates/*")
-
+	var err error
 	r.GET("/services", func(c *gin.Context) {
 		filter := c.Query("filter")
 		priceFrom := c.Query("pricefrom")
@@ -77,7 +73,10 @@ func StartServer() error {
 		}
 
 		c.HTML(http.StatusOK, "services.html", gin.H{
-			"Items": res,
+			"Items":     res,
+			"Filter":    filter,
+			"PriceFrom": priceFrom,
+			"PriceUpTo": priceUpTo,
 		})
 	})
 
@@ -87,6 +86,13 @@ func StartServer() error {
 
 	r.GET("/contacts", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "contacts.html", gin.H{})
+	})
+
+	r.GET("/services/:id", func(c *gin.Context) {
+		id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+		c.HTML(http.StatusOK, "service.html", gin.H{
+			"Item": items[id],
+		})
 	})
 
 	r.Static("/static", "./resources")

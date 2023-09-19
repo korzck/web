@@ -2,22 +2,34 @@
     <div class="title filter">
         <form>
             <label>
-              <input type="radio" name="filter" value="all" checked> All
+                {{ if eq .Filter "all" }}
+                <input type="radio" name="filter" value="all" checked> Все
+                {{ else }}
+                <input type="radio" name="filter" value="all"> Все
+                {{ end }}
             </label>
             <label>
-              <input type="radio" name="filter" value="metal"> Metal
+                {{ if eq .Filter "metal" }}
+                <input type="radio" name="filter" value="metal" checked> Металл
+                {{ else }}
+                <input type="radio" name="filter" value="metal"> Металл
+                {{ end }}
             </label>
             <label>
-              <input type="radio" name="filter" value="wood"> Wood
+                {{ if eq .Filter "wood" }}
+                <input type="radio" name="filter" value="wood" checked> Дерево
+                {{ else }}
+                <input type="radio" name="filter" value="wood"> Дерево
+                {{ end }}
             </label>
             
             <label>
-                <input class="form" type="number" name="pricefrom"> Price from
+                <input class="form" type="number" name="pricefrom" value="{{ .PriceFrom }}"> Цена от
             </label>
             <label>
-                <input class="form" type="number" name="priceupto"> Price up to
+                <input class="form" type="number" name="priceupto" value="{{ .PriceUpTo }}"> Цена до
             </label>
-            <button class="button text" type="submit">Apply Filter</button>
+            <button class="button text" type="submit">Применить фильтр</button>
           </form>
     </div>
         {{range .Items}}
@@ -25,10 +37,10 @@
                 <h3>{{ .Title }}</h3>
                 <img src="{{ .ImgURL }}">
                 <p>{{ .Subtitle }}</p>
-                <p class="price">Price: {{ .Price }}$ per workpiece</p>
+                <p class="price">Цена: {{ .Price }} за болванку</p>
                 <br />
                 <br />
-                <a href="{{ .URL }}" class="button">Add to order list</a>
+                <a href="services/{{ .Id }}" class="button">Перейти на страницу</a>
             </div>
         {{end}}
 {{template "footer.html"}}
