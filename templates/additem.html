@@ -1,0 +1,44 @@
+{{template "header.html"}}
+    <div class="add-form">
+        <form action="additem" method="POST">
+            <label>
+                Материал<input type="text" name="type" placeholder="Введите metal/wood"><br>
+            </label>
+            <label>
+                Заголовок<input type="text" name="title" placeholder="Введите заголовок"><br>
+            </label>
+            <label>
+                Подзаголовок<input type="text" name="subtitle" placeholder="Введите подзаголовок"><br>
+            </label>
+            <label>
+                Цена<input type="text" name="price" placeholder="Введите цену"><br>
+            </label>
+            <label>
+                Ссылка на картинку<input type="text" name="url" placeholder="Введите урл картинки"><br>
+            </label>
+            <label>
+                Описание<input type="text" name="info" placeholder="Введите описание"><br>
+            </label>
+            <input class="submit" type="submit" value="Добавить">
+        </form>
+    </div>
+    {{range .Items}}
+        <div class="card" style="color: black;">
+            <h3>{{ .Title }}</h3>
+            <img src="{{ .ImgURL }}">
+            <p>{{ .Subtitle }}</p>
+            <p class="price">Цена: {{ .Price }} за болванку</p>
+            <br />
+            <a href="../services/{{ .Id }}" class="button">Перейти на страницу</a>
+            <form action="deleteitem/{{ .Id }}" method="POST">
+                <label>
+                    ID<input style="color: white; border: none; background-color: #3057E1;" type="text" name="id" value="{{ .Id }}"><br>
+                </label>
+                <input class="submit" type="submit" value="Удалить">
+            </form>
+
+        </div>
+    {{end}}
+
+{{template "footer.html"}}
+

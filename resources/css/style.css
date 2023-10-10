@@ -195,3 +195,30 @@ label {
     display: flex;
     flex-direction: column;
 }
+
+.submit {
+    background-color: #3057E1;
+    border-color: white;
+    border-style: solid;
+    width: 90%;
+    height: 40px;
+}
+
+
+.add-form {
+    padding: 10px;
+    background-color: #3057E1;
+    width: 200px;
+    align-items: center;
+    justify-content:center;
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+}
+
+.add-form input {
+    padding: 10px;
+    color: #000000;
+    
+}
+
