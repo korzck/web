@@ -5,3 +5,7 @@ run:
 .PHONY: migrate
 migrate:
 	$(GOENV) go run cmd/migrate/main.go $(RUN_ARGS)
+
+.PHONY: migrate-minio
+migrate-minio:
+	$(GOENV) go run cmd/minio/main.go $(RUN_ARGS)

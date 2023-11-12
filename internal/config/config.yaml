@@ -4,3 +4,8 @@ database:
   DB_PORT: 5432
   DB_USER: postgres
   DB_PASS: 123
+
+minio:
+  user: minioadmin
+  pass: minioadmin
+  endpoint: 127.0.0.1:9000

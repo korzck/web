@@ -41,19 +41,3 @@ func (r *Repo) GetItems() ([]models.Item, error) {
 	res := r.DB.Where("deleted_at IS NULL").Find(&items)
 	return items, res.Error
 }
-
-// func (r *Repo) AddItem(item *models.User) error {
-// 	res := r.DB.Save(item)
-// 	if res.Error != nil {
-// 		return res.Error
-// 	}
-// 	return nil
-// }
-
-// func (r *Repo) AddUser(user *models.User) error {
-// 	res := r.DB.Save(user)
-// 	if res.Error != nil {
-// 		return res.Error
-// 	}
-// 	return nil
-// }

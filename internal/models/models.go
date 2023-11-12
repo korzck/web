@@ -4,28 +4,29 @@ import "gorm.io/gorm"
 
 type Item struct {
 	gorm.Model
-	Id       uint `gorm:"primarykey"`
-	Title    string
-	Subtitle string
-	Price    string
-	ImgURL   string
-	URL      string
-	Info     string
-	Type     string
+	Id       uint   `gorm:"primarykey" json:"id"`
+	Title    string `json:"title"`
+	Subtitle string `json:"subtitle"`
+	Price    string `json:"price"`
+	ImgURL   string `json:"imgurl"`
+	URL      string `json:"url"`
+	Info     string `json:"info"`
+	Type     string `json:"type"`
 }
 
 type User struct {
 	gorm.Model
-	Id    uint   `gorm:"primarykey"`
-	Email string `gorm:"unique;not null"`
-	Name  string
+	Id    uint   `gorm:"primarykey" json:"id"`
+	Email string `gorm:"unique;not null" json:"email"`
+	Name  string `json:"name"`
 }
 
 type Order struct {
 	gorm.Model
-	Id     int `gorm:"primarykey"`
-	UserId uint
-	User   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Id     int    `gorm:"primarykey" json:"id"`
+	Status string `json:"status"`
+	UserId uint   `json:"user_id"`
+	User   User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type OrderItem struct {

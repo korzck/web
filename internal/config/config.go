@@ -15,6 +15,11 @@ type Config struct {
 		Password string `yaml:"DB_PASS"`
 		Name     string `yaml:"DB_NAME"`
 	} `yaml:"database"`
+	Minio struct {
+		User     string `yaml:"user"`
+		Pass     string `yaml:"pass"`
+		Endpoint string `yaml:"endpoint"`
+	} `yaml:"minio"`
 }
 
 func NewConfig() *Config {
