@@ -153,6 +153,7 @@ func Run() error {
 	log.Println("Server start up")
 
 	r := gin.Default()
+	r.Use(CORSMiddleware())
 
 	db, _ := repo.NewRepo()
 
@@ -185,6 +186,12 @@ func Run() error {
 		minioClient.PutObject(context.Background(), "cnc", newFileName, buffer, file.Size, minio.PutObjectOptions{ContentType: contentType})
 		reqParams := make(url.Values)
 		link, err := minioClient.PresignedGetObject(context.Background(), "cnc", newFileName, 7*24*time.Hour, reqParams)
+		if link == nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"link": "",
+				"err":  err,
+			})
+		}
 		c.JSON(http.StatusOK, gin.H{
 			"link": link.String(),
 			"err":  err,
@@ -541,4 +548,21 @@ func Run() error {
 
 	log.Println("Server down")
 	return nil
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
