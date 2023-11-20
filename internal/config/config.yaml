@@ -1,9 +1,9 @@
 database:
   DB_HOST: localhost
-  DB_NAME: cncs
+  DB_NAME: postgres
   DB_PORT: 5432
-  DB_USER: postgres
-  DB_PASS: 123
+  DB_USER: konstantin.koretskiy
+  DB_PASS: 
 
 minio:
   user: minioadmin

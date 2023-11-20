@@ -200,7 +200,30 @@ func Run() error {
 
 	r.GET("/items", func(c *gin.Context) {
 		items := make([]models.Item, 0)
-		res := db.DB.Where("deleted_at IS NULL").Find(&items)
+		min := c.Query("min")
+		max := c.Query("max")
+		material := c.Query("material")
+		log.Println(min, max, material)
+		query := db.DB.Where("deleted_at IS NULL") //.Find(&items)
+		if min != "" {
+			query.Where(`price >= ?`, min)
+		}
+		if max != "" {
+			query.Where(`price <= ?`, max)
+		}
+		if material != "" {
+			query.Where(`type = ?`, material)
+		}
+		// if max != "" {
+		// 	maxNum, err := strconv.ParseInt(max, 10, 64)
+		// 	if err == nil {
+		// 		query.Where(`price <= ?`, maxNum)
+		// 	}
+		// }
+		// if material != "" {
+		// 	query.Where("type = ?", material)
+		// }
+		res := query.Find(&items)
 		if res.Error != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error: ": res.Error.Error()})
 			return
