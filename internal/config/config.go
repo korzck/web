@@ -20,6 +20,11 @@ type Config struct {
 		Pass     string `yaml:"pass"`
 		Endpoint string `yaml:"endpoint"`
 	} `yaml:"minio"`
+	Redis struct {
+		Host     string `yaml:"host"`
+		Port     string `yaml:"port"`
+		Password string `yaml:"password"`
+	} `yaml:"redis"`
 }
 
 func NewConfig() *Config {

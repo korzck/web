@@ -1,0 +1,99 @@
+basePath: /
+definitions:
+  api.Empty:
+    type: object
+  models.ItemModel:
+    properties:
+      id:
+        type: integer
+      imgurl:
+        type: string
+      info:
+        type: string
+      price:
+        type: string
+      subtitle:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+externalDocs:
+  description: Курс РИП ИУ5
+  url: https://github.com/iu5git/Web/
+host: localhost:8080
+info:
+  contact:
+    email: konstantin.koretskiy@gmail.com
+    name: Корецкий К.В.
+    url: https://github.com/korzck
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Система заявок на производстве
+  version: "1.0"
+paths:
+  /items:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: filter by min price
+        format: text
+        in: query
+        name: min
+        type: string
+      - description: filter by max price
+        format: text
+        in: query
+        name: max
+        type: string
+      - description: filter by material (wood/metal)
+        format: text
+        in: query
+        name: material
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ItemModel'
+            type: array
+      summary: Get list of all items
+      tags:
+      - items
+  /s3/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      parameters:
+      - description: upload file
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: metadata
+        in: formData
+        name: metadata
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.Empty'
+      summary: Upload s3 file
+      tags:
+      - s3
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

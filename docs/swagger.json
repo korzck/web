@@ -1,0 +1,149 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Система заявок на производстве",
+        "contact": {
+            "name": "Корецкий К.В.",
+            "url": "https://github.com/korzck",
+            "email": "konstantin.koretskiy@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/items": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "items"
+                ],
+                "summary": "Get list of all items",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "text",
+                        "description": "filter by min price",
+                        "name": "min",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "text",
+                        "description": "filter by max price",
+                        "name": "max",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "text",
+                        "description": "filter by material (wood/metal)",
+                        "name": "material",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ItemModel"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/s3/upload": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "s3"
+                ],
+                "summary": "Upload s3 file",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "upload file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "metadata",
+                        "name": "metadata",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Empty"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.Empty": {
+            "type": "object"
+        },
+        "models.ItemModel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imgurl": {
+                    "type": "string"
+                },
+                "info": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "subtitle": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "Курс РИП ИУ5",
+        "url": "https://github.com/iu5git/Web/"
+    }
+}

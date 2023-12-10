@@ -1,0 +1,14 @@
+basePath: /
+host: 127.0.0.1
+info:
+  contact:
+    name: API Support
+  license:
+    name: AS IS (NO WARRANTY)
+  title: Система заявок на производстве
+  version: "1.0"
+paths: {}
+schemes:
+- https
+- http
+swagger: "2.0"

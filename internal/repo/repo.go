@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"fmt"
 	"os"
 
 	conf "web/internal/config"
@@ -31,6 +32,7 @@ func NewRepo() (*Repo, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Connected to Postgres")
 	return &Repo{
 		DB: db,
 	}, nil
