@@ -37,15 +37,11 @@ func (s *Service) LoadS3(c *gin.Context) {
 		return
 	}
 
-	// Retrieve file information
 	extension := filepath.Ext(file.Filename)
 	newFileName := uuid.New().String() + extension
-	// filePath := "/files/" + newFileName
 	contentType := file.Header["Content-Type"][0]
 	buffer, err := file.Open()
 	if err != nil {
-		// c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-		// return
 		httputil.NewError(c, http.StatusBadRequest, err)
 		return
 	}

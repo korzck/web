@@ -50,3 +50,11 @@ type OrderItem struct {
 	ItemId  uint
 	Item    Item `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
+
+const (
+	OrderStatusNew       = "new"
+	OrderStatusPending   = "pending"
+	OrderStatusActive    = "active"
+	OrderStatusPaused    = "paused"
+	OrderStatusCompleted = "completed"
+)

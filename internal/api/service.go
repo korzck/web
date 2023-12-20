@@ -1,10 +1,12 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
 	mClient "web/internal/minio"
+	"web/internal/models"
 	"web/internal/redis"
 	"web/internal/repo"
 
@@ -51,40 +53,47 @@ func (s *Service) Run() error {
 	r.POST("/signup", s.SignUp)
 	r.POST("/login", s.Login)
 	r.POST("/logout", s.Logout)
-	r.Use(s.UserAuth).POST("/validate", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{})
-	})
-	r.Use(s.AdminAuth).POST("/validate_admin", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{})
-	})
 
 	r.GET("/orders", s.GetOrders)
+	r.GET("/orders/:id", s.GetOrder)
+	r.GET("/orders/current", s.GetCart)
+
+	r.GET("/test", s.Test)
+	r.PUT("/orders", s.ChangeStatus)
 	r.POST("/orders", s.MakeOrder)
+	r.POST("/cartcomment", s.ChangeComment)
 
 	r.GET("/orderitems", s.GetItemsInOrder)
 	r.POST("/orderitems", s.AddItemToOrder)
+	r.POST("/cartadditem", s.AddItemToCart)
+	r.DELETE("/orderitems", s.DeleteItemFromOrder)
 
-	// admin := r.Group("/admin")
-	// {
+	r.Use(s.UserAuth).POST("/validate", s.Validate)
+	r.Use(s.AdminAuth).POST("/validate_admin", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{})
+	})
+	admin := r.Group("/admin")
+	{
 
-	// 	admin.POST("/item", func(c *gin.Context) {
-	// 		jsonData, err := c.GetRawData()
-	// 		if err != nil {
-	// 			c.JSON(http.StatusNotFound, gin.H{"error: ": err.Error()})
-	// 		}
-	// 		item := &models.Item{}
-	// 		err = json.Unmarshal(jsonData, item)
-	// 		if err == nil {
-	// 			tx := db.DB.Save(item)
-	// 			if tx.Error != nil {
-	// 				c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
-	// 				return
-	// 			}
-	// 			c.JSON(http.StatusOK, item)
-	// 		} else {
-	// 			c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-	// 		}
-	// 	})
+		admin.Use(s.AdminAuth).POST("/item", func(c *gin.Context) {
+			jsonData, err := c.GetRawData()
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"error: ": err.Error()})
+			}
+			item := &models.Item{}
+			err = json.Unmarshal(jsonData, item)
+			if err == nil {
+				tx := s.db.DB.Save(item)
+				if tx.Error != nil {
+					c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
+					return
+				}
+				c.JSON(http.StatusOK, item)
+			} else {
+				c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+			}
+		})
+	}
 
 	// 	admin.PUT("/item", func(c *gin.Context) {
 	// 		jsonData, err := c.GetRawData()
@@ -363,16 +372,15 @@ func (s *Service) Run() error {
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT, DELETE")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
 		}
-
 		c.Next()
 	}
 }
