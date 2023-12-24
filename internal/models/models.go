@@ -2,9 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Item struct {
-	gorm.Model
-	Id       uint   `gorm:"primarykey" json:"id"`
+type ItemPrototype struct {
 	Title    string `json:"title"`
 	Subtitle string `json:"subtitle"`
 	Price    string `json:"price"`
@@ -12,6 +10,11 @@ type Item struct {
 	URL      string `json:"url"`
 	Info     string `json:"info"`
 	Type     string `json:"type"`
+}
+type Item struct {
+	gorm.Model
+	Id uint `gorm:"primarykey" json:"id"`
+	ItemPrototype
 }
 
 type ItemModel struct {
@@ -25,13 +28,21 @@ type ItemModel struct {
 	Type     string `json:"type"`
 }
 
+type UserCreds struct {
+	Email    string `gorm:"unique;not null" json:"email"`
+	Password string `json:"password"`
+}
+
+type UserPrototype struct {
+	UserCreds
+	Name string `json:"name"`
+	Tags string `json:"tags"`
+}
+
 type User struct {
 	gorm.Model
-	Id       uint   `gorm:"primarykey" json:"id"`
-	Email    string `gorm:"unique;not null" json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Tags     string `json:"tags"`
+	Id uint `gorm:"primarykey" json:"id"`
+	UserPrototype
 }
 
 type Order struct {

@@ -1,0 +1,42 @@
+package models
+
+import "mime/multipart"
+
+type ItemsSwagger struct {
+	Items   []Item `json:"items"`
+	OrderId uint64 `json:"order_id"`
+}
+
+type UserSwagger struct {
+	Email string `json:"email"`
+	Name  string `json:"name"`
+	Id    uint   `json:"id"`
+	Tags  string `json:"tags"`
+	Order uint64 `json:"order"`
+}
+
+type FormSwagger struct {
+	File *multipart.FileHeader `form:"file" binding:"required"`
+}
+
+type OrderSwagger struct {
+	Status string               `json:"status"`
+	Id     uint                 `json:"id"`
+	UserId uint                 `json:"user_id"`
+	Items  []ItemInOrderSwagger `json:"items"`
+}
+
+type ItemInOrderSwagger struct {
+	Id       uint64 `json:"id"`
+	Quantity uint64 `json:"quantity"`
+	Item     Item   `json:"item"`
+}
+
+type OrderStatusSwagger struct {
+	Status string `json:"status"`
+}
+
+type ImageSwagger struct {
+	Link  string `json:"link"`
+	Error string `json:"error"`
+}

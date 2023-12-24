@@ -12,6 +12,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Sign godoc
+// @Summary      Sign up
+// @Tags         auth
+// @Param        userPrototype body models.UserPrototype true "User object"
+// @Accept       json
+// @Produce      json
+// @Success      200  {int}  id
+// @Router       /signup [post]
 func (s *Service) SignUp(c *gin.Context) {
 	user := &models.User{}
 	if c.Bind(&user) != nil {
@@ -52,6 +60,14 @@ func (s *Service) SignUp(c *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary      Login
+// @Tags         auth
+// @Param        userCreds body models.UserCreds true "User object"
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.UserSwagger
+// @Router       /login [post]
 func (s *Service) Login(c *gin.Context) {
 	user := &models.User{}
 	if c.Bind(&user) != nil {
@@ -111,45 +127,30 @@ func (s *Service) Login(c *gin.Context) {
 		return
 	}
 
-	// jsonData, err := c.GetRawData()
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-	// 	return
-	// }
 	// order := &models.Order{}
-
-	// err = json.Unmarshal(jsonData, order)
-	// if err == nil {
-	// idNum, _ := strconv.ParseInt(id, 10, 64)
-	order := &models.Order{}
-	s.db.DB.Where("deleted_at IS NULL").Where("user_id = ?", foundUser.Id).Where("status = 'new'").First(&order)
-	if order.Status != "new" {
-		order.UserId = foundUser.Id
-		order.Status = "new"
-		tx := s.db.DB.Save(order)
-		if tx.Error != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
-			return
-		}
-	}
-	// c.JSON(http.StatusOK, order)
-	// return
-	// } else {
-	// c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
-	// return
+	// s.db.DB.Where("deleted_at IS NULL").Where("user_id = ?", foundUser.Id).Where("status = 'new'").First(&order)
+	// if order.Status != "new" {
+	// 	order.UserId = foundUser.Id
+	// 	order.Status = "new"
+	// 	tx := s.db.DB.Save(order)
+	// 	if tx.Error != nil {
+	// 		c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
+	// 		return
+	// 	}
 	// }
 
-	c.JSON(http.StatusOK, gin.H{
-		"name":  foundUser.Name,
-		"email": foundUser.Email,
-		"id":    foundUser.Id,
+	c.JSON(http.StatusOK, &models.UserSwagger{
+		Id:    foundUser.Id,
+		Name:  foundUser.Name,
+		Email: foundUser.Email,
+		Tags:  foundUser.Tags,
 	})
 }
 
 func (s *Service) getUserRole(c *gin.Context) (string, string, error) {
 	cookie, err := c.Cookie("auth")
 	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		// fmt.Printf("got err %v", err)
 		return "", "", err
 	}
 	token, err := jwt.Parse(cookie, func(t *jwt.Token) (interface{}, error) {
@@ -179,10 +180,10 @@ func (s *Service) AdminAuth(c *gin.Context) {
 		})
 	}
 	if s.isLogout(id) {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatus(http.StatusForbidden)
 	}
 	if role != "admin" {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatus(http.StatusForbidden)
 
 	}
 	c.Next()
@@ -194,13 +195,22 @@ func (s *Service) UserAuth(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 	if s.isLogout(id) {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatus(http.StatusForbidden)
 	}
 	c.Next()
 }
 
+// Logout godoc
+// @Summary      Logout
+// @Tags         auth
+// @Param 		 Cookie header string  false "token"     default(token=xxx)
+// @Accept       json
+// @Produce      json
+// @Success      200
+// @Router       /logout [post]
 func (s *Service) Logout(c *gin.Context) {
 	id, _, err := s.getUserRole(c)
 	if err != nil {
@@ -218,19 +228,33 @@ func (s *Service) isLogout(id string) bool {
 	return err == nil
 }
 
+// Validate godoc
+// @Summary      validate auth
+// @Tags         auth
+// @Param 		 Cookie header string  false "token"     default(token=xxx)
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.UserSwagger
+// @Router       /validate [post]
 func (s *Service) Validate(c *gin.Context) {
 	id, _, err := s.getUserRole(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 	foundUser := &models.User{}
+	foundOrder := &models.Order{}
 	s.db.DB.First(&foundUser, "id = ?", id)
-	c.JSON(http.StatusOK, gin.H{
-		"name":  foundUser.Name,
-		"email": foundUser.Email,
-		"id":    foundUser.Id,
+	s.db.DB.Where("user_id = ?", foundUser.Id).Where("status = ?", "new").First(&foundOrder)
+
+	c.JSON(http.StatusOK, &models.UserSwagger{
+		Email: foundUser.Email,
+		Name:  foundUser.Name,
+		Id:    foundUser.Id,
+		Tags:  foundUser.Tags,
+		Order: uint64(foundOrder.Id),
 	})
 
 }

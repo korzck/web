@@ -12,4 +12,4 @@ migrate-minio:
 
 .PHONY: gendoc
 gendoc:
-	 swag init -g cmd/main.go 
+	~/go/bin/swag init -g cmd/main.go --parseDependency --parseInternal
