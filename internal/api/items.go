@@ -236,10 +236,22 @@ func (s *Service) PostItemToOrder(c *gin.Context) {
 			return
 		}
 	}
+
+	items := make([]models.OrderItem, 0)
+	tx = s.db.DB.Where("deleted_at IS NULL").Where("order_id = ?", order.Id).Where("item_id = ?", itemId).Where("comment != ?", "").First(&items)
+	// if tx.Error != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
+	// 	return
+	// }
+	comment := ""
+	if len(items) != 0 {
+		comment = items[0].Comment
+	}
 	// orderItem.OrderId = uint64(order.Id)
 	s.db.DB.Save(&models.OrderItem{
 		OrderId: uint(order.Id),
 		ItemId:  uint(itemId),
+		Comment: comment,
 	})
 	tx = s.db.DB.Where("deleted_at IS NULL").Where("user_id = ?", userId).Where("status = 'new'").First(&order)
 	if tx.Error != nil {

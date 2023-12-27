@@ -65,6 +65,7 @@ func (s *Service) Run() error {
 	r.PUT("/orders/make", s.ConfirmOrder)
 	r.DELETE("/orders/delete", s.DeleteOrder)
 	r.DELETE("orders/items/:id", s.DeleteItemFromOrder)
+	r.PUT("orders/:id/comment", s.AddItemComment)
 
 	// r.GET("/orders/current", s.GetCart)
 

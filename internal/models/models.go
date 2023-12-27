@@ -51,7 +51,7 @@ type Order struct {
 	Status  string `json:"status"`
 	UserId  uint   `json:"user_id"`
 	User    User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Comment string `json:"comment"`
+	AdminId uint64 `json:"admin_id"`
 }
 
 type OrderItem struct {
@@ -59,13 +59,6 @@ type OrderItem struct {
 	OrderId uint
 	Order   Order `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	ItemId  uint
-	Item    Item `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Item    Item   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Comment string `json:"comment"`
 }
-
-const (
-	OrderStatusNew       = "new"
-	OrderStatusPending   = "pending"
-	OrderStatusActive    = "active"
-	OrderStatusPaused    = "paused"
-	OrderStatusCompleted = "completed"
-)

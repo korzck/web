@@ -40,8 +40,17 @@ definitions:
       url:
         type: string
     type: object
+  web_internal_models.ItemCommentSwagger:
+    properties:
+      comment:
+        type: string
+      item_id:
+        type: integer
+    type: object
   web_internal_models.ItemInOrderSwagger:
     properties:
+      comment:
+        type: string
       id:
         type: integer
       item:
@@ -96,8 +105,8 @@ definitions:
     type: object
   web_internal_models.Order:
     properties:
-      comment:
-        type: string
+      admin_id:
+        type: integer
       createdAt:
         type: string
       deletedAt:
@@ -472,6 +481,31 @@ paths:
         "200":
           description: OK
       summary: Approve or decline order
+      tags:
+      - orders
+  /orders/{id}/comment:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Item comment
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.ItemCommentSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete item from current order
       tags:
       - orders
   /orders/delete:

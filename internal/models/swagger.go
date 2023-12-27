@@ -29,11 +29,17 @@ type OrderSwagger struct {
 type ItemInOrderSwagger struct {
 	Id       uint64 `json:"id"`
 	Quantity uint64 `json:"quantity"`
+	Comment  string `json:"comment"`
 	Item     Item   `json:"item"`
 }
 
 type OrderStatusSwagger struct {
 	Status string `json:"status"`
+}
+
+type ItemCommentSwagger struct {
+	ItemId  uint64 `json:"item_id"`
+	Comment string `json:"comment"`
 }
 
 type ImageSwagger struct {

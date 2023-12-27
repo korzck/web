@@ -518,6 +518,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/orders/{id}/comment": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Delete item from current order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "text",
+                        "description": "item id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Item comment",
+                        "name": "comment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/web_internal_models.ItemCommentSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/signup": {
             "post": {
                 "consumes": [
@@ -645,9 +683,23 @@ const docTemplate = `{
                 }
             }
         },
+        "web_internal_models.ItemCommentSwagger": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "item_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "web_internal_models.ItemInOrderSwagger": {
             "type": "object",
             "properties": {
+                "comment": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -731,8 +783,8 @@ const docTemplate = `{
         "web_internal_models.Order": {
             "type": "object",
             "properties": {
-                "comment": {
-                    "type": "string"
+                "admin_id": {
+                    "type": "integer"
                 },
                 "createdAt": {
                     "type": "string"

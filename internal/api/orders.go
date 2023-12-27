@@ -43,7 +43,7 @@ func (s *Service) GetOrders(c *gin.Context) {
 			date, _ := time.Parse("2006-01-02", min)
 			tx = tx.Where("created_at::date  >=?", date)
 		}
-		if status != "" {
+		if status != "all" {
 			tx = tx.Where("status = ?", status)
 		} else {
 			tx = tx.Where("status != ?", "new")
@@ -79,6 +79,17 @@ func (s *Service) GetOrders(c *gin.Context) {
 // @Success      200
 // @Router       /orders/{id}/approve [put]
 func (s *Service) PutOrderStatus(c *gin.Context) {
+	id, tag, err := s.getUserRole(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	if tag != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{})
+		return
+	}
 	orderId, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 
 	status := &struct {
@@ -105,6 +116,7 @@ func (s *Service) PutOrderStatus(c *gin.Context) {
 		return
 	}
 	order.Status = status.Status
+	order.AdminId, _ = strconv.ParseUint(id, 10, 64)
 	tx = s.db.DB.Where("id = ?", orderId).Updates(order)
 	if tx.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
@@ -211,21 +223,12 @@ func (s *Service) DeleteItemFromOrder(c *gin.Context) {
 		return
 	}
 
-	// order = &models.Order{}
-	// s.db.DB.Where("deleted_at IS NULL").Where("user_id = ?", id).Where("status = 'new'").First(&order)
 	orderItems := make([]models.OrderItem, 0)
 	tx = s.db.DB.Where("deleted_at IS NULL").Where("order_id = ?", order.Id).Find(&orderItems)
 	if tx.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
 		return
 	}
-
-	// order = &models.Order{}
-	// tx = s.db.DB.Where("deleted_at IS NULL").Where("id = ?", order.Id).First(&order)
-	// if tx.Error != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
-	// 	return
-	// }
 
 	resp := make([]models.ItemInOrderSwagger, 0)
 	itemsMap := make(map[uint64]models.ItemInOrderSwagger)
@@ -263,6 +266,61 @@ func (s *Service) DeleteItemFromOrder(c *gin.Context) {
 		UserId: order.UserId,
 		Items:  resp,
 	})
+}
+
+// DeleteItemFromOrder godoc
+// @Summary      Delete item from current order
+// @Tags         orders
+// @Param        id    path     string  true  "item id"  Format(text)
+// @Param        comment body models.ItemCommentSwagger true "Item comment"
+// @Accept       json
+// @Produce      json
+// @Success      200
+// @Router       /orders/{id}/comment [put]
+func (s *Service) AddItemComment(c *gin.Context) {
+	_, _, err := s.getUserRole(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	orderId, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+
+	orderItems := make([]models.OrderItem, 0)
+	res := s.db.DB.Where("deleted_at IS NULL").Where("order_id = ?", orderId).Find(&orderItems)
+	if res.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error: ": res.Error.Error()})
+		return
+	}
+
+	item := &models.ItemCommentSwagger{}
+
+	jsonData, err := c.GetRawData()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error: ": err.Error(),
+		})
+		return
+	}
+	err = json.Unmarshal(jsonData, item)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error: ": err.Error()})
+		return
+	}
+
+	for i := range orderItems {
+		if orderItems[i].ItemId == uint(item.ItemId) {
+			orderItems[i].Comment = item.Comment
+		}
+	}
+	tx := s.db.DB.Save(orderItems)
+	if tx.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 // GetOrder godoc
@@ -313,6 +371,7 @@ func (s *Service) GetItemsInOrder(c *gin.Context) {
 		itemsMap[uint64(v.ItemId)] = models.ItemInOrderSwagger{
 			Id:       uint64(item.Id),
 			Quantity: uint64(q + 1),
+			Comment:  v.Comment,
 			Item:     *item,
 		}
 	}
