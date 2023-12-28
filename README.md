@@ -1,2 +1,4 @@
 # web
-5th semester web basics labs
+Фронтенд для сервиса - https://github.com/korzck/web-react
+
+Мобильное приложение для сервиса - https://github.com/korzck/web-mobile
