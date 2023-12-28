@@ -111,6 +111,8 @@ definitions:
         type: string
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
       id:
         type: integer
       status:
@@ -129,6 +131,8 @@ definitions:
     type: object
   web_internal_models.OrderSwagger:
     properties:
+      email:
+        type: string
       id:
         type: integer
       items:

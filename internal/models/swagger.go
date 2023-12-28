@@ -23,6 +23,7 @@ type OrderSwagger struct {
 	Status string               `json:"status"`
 	Id     uint                 `json:"id"`
 	UserId uint                 `json:"user_id"`
+	Email  string               `json:"email"`
 	Items  []ItemInOrderSwagger `json:"items"`
 }
 

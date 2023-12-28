@@ -50,6 +50,7 @@ type Order struct {
 	Id      int    `gorm:"primarykey" json:"id"`
 	Status  string `json:"status"`
 	UserId  uint   `json:"user_id"`
+	Email   string `json:"email"`
 	User    User   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	AdminId uint64 `json:"admin_id"`
 }

@@ -54,6 +54,11 @@ func (s *Service) GetOrders(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error: ": tx.Error.Error()})
 			return
 		}
+		for i := range adminOrders {
+			userForEmail := &models.User{}
+			s.db.DB.Where("deleted_at IS NULL").Where("id = ?", adminOrders[i].UserId).Find(&userForEmail)
+			adminOrders[i].Email = userForEmail.Email
+		}
 
 		c.JSON(http.StatusOK, adminOrders)
 		return
@@ -64,6 +69,12 @@ func (s *Service) GetOrders(c *gin.Context) {
 	if ores.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error: ": ores.Error.Error()})
 		return
+	}
+
+	for i := range orders {
+		userForEmail := &models.User{}
+		s.db.DB.Where("deleted_at IS NULL").Where("id = ?", orders[i].UserId).Find(&userForEmail)
+		orders[i].Email = userForEmail.Email
 	}
 
 	c.JSON(http.StatusOK, orders)
@@ -260,10 +271,14 @@ func (s *Service) DeleteItemFromOrder(c *gin.Context) {
 		})
 	}
 
+	userForEmail := &models.User{}
+	s.db.DB.Where("deleted_at IS NULL").Where("id = ?", order.UserId).Find(&userForEmail)
+
 	c.JSON(http.StatusOK, &models.OrderSwagger{
 		Id:     uint(order.Id),
 		Status: order.Status,
 		UserId: order.UserId,
+		Email:  userForEmail.Email,
 		Items:  resp,
 	})
 }
@@ -379,10 +394,14 @@ func (s *Service) GetItemsInOrder(c *gin.Context) {
 		resp = append(resp, v)
 	}
 
+	userForEmail := &models.User{}
+	s.db.DB.Where("deleted_at IS NULL").Where("id = ?", order.UserId).Find(&userForEmail)
+
 	c.JSON(http.StatusOK, &models.OrderSwagger{
 		Id:     uint(orderId),
 		Status: order.Status,
 		UserId: order.UserId,
 		Items:  resp,
+		Email:  userForEmail.Email,
 	})
 }
