@@ -1,0 +1,604 @@
+basePath: /
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  web_internal_models.ImageSwagger:
+    properties:
+      error:
+        type: string
+      link:
+        type: string
+    type: object
+  web_internal_models.Item:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      imgurl:
+        type: string
+      info:
+        type: string
+      price:
+        type: string
+      subtitle:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      url:
+        type: string
+    type: object
+  web_internal_models.ItemCommentSwagger:
+    properties:
+      comment:
+        type: string
+      item_id:
+        type: integer
+    type: object
+  web_internal_models.ItemInOrderSwagger:
+    properties:
+      comment:
+        type: string
+      id:
+        type: integer
+      item:
+        $ref: '#/definitions/web_internal_models.Item'
+      quantity:
+        type: integer
+    type: object
+  web_internal_models.ItemModel:
+    properties:
+      id:
+        type: integer
+      imgurl:
+        type: string
+      info:
+        type: string
+      price:
+        type: string
+      subtitle:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  web_internal_models.ItemPrototype:
+    properties:
+      imgurl:
+        type: string
+      info:
+        type: string
+      price:
+        type: string
+      subtitle:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  web_internal_models.ItemsSwagger:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/web_internal_models.Item'
+        type: array
+      order_id:
+        type: integer
+    type: object
+  web_internal_models.Order:
+    properties:
+      admin_id:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/web_internal_models.User'
+      user_id:
+        type: integer
+    type: object
+  web_internal_models.OrderStatusSwagger:
+    properties:
+      status:
+        type: string
+    type: object
+  web_internal_models.OrderSwagger:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/web_internal_models.ItemInOrderSwagger'
+        type: array
+      status:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  web_internal_models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      tags:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  web_internal_models.UserCreds:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  web_internal_models.UserPrototype:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      tags:
+        type: string
+    type: object
+  web_internal_models.UserSwagger:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      tags:
+        type: string
+    type: object
+externalDocs:
+  description: Курс РИП ИУ5
+  url: https://github.com/iu5git/Web/
+host: localhost:8080
+info:
+  contact:
+    email: konstantin.koretskiy@gmail.com
+    name: Корецкий К.В.
+    url: https://github.com/korzck
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Система заявок на производстве
+  version: "1.0"
+paths:
+  /items:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: filter by min price
+        format: text
+        in: query
+        name: min
+        type: string
+      - description: filter by max price
+        format: text
+        in: query
+        name: max
+        type: string
+      - description: filter by material (wood/metal)
+        format: text
+        in: query
+        name: material
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.ItemsSwagger'
+      summary: Get list of all items
+      tags:
+      - items
+  /items/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.ItemModel'
+      summary: Get item by id
+      tags:
+      - items
+  /items/{id}/delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete item by id
+      tags:
+      - items
+  /items/{id}/post:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.Order'
+      summary: Post item to current order
+      tags:
+      - items
+  /items/{id}/put:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Item object
+        in: body
+        name: itemPrototype
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.ItemPrototype'
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Change item
+      tags:
+      - items
+  /items/image:
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      parameters:
+      - description: upload file
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: metadata
+        in: formData
+        name: metadata
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.ImageSwagger'
+      summary: Upload s3 file
+      tags:
+      - items
+  /items/post:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Item object
+        in: body
+        name: itemPrototype
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.ItemPrototype'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.ItemPrototype'
+      summary: Create item
+      tags:
+      - items
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User object
+        in: body
+        name: userCreds
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.UserCreds'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.UserSwagger'
+      summary: Login
+      tags:
+      - auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - default: token=xxx
+        description: token
+        in: header
+        name: Cookie
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Logout
+      tags:
+      - auth
+  /orders:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: min date
+        format: text
+        in: query
+        name: min_date
+        type: string
+      - description: max date
+        format: text
+        in: query
+        name: max_date
+        type: string
+      - description: order status
+        format: text
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/web_internal_models.Order'
+            type: array
+      summary: Get list of all orders
+      tags:
+      - orders
+  /orders/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: order id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.OrderSwagger'
+      summary: Get order by id
+      tags:
+      - orders
+  /orders/{id}/approve:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order status
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.OrderStatusSwagger'
+      - description: order id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Approve or decline order
+      tags:
+      - orders
+  /orders/{id}/comment:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Item comment
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.ItemCommentSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete item from current order
+      tags:
+      - orders
+  /orders/delete:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete current order
+      tags:
+      - orders
+  /orders/items/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: item id
+        format: text
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.OrderSwagger'
+      summary: Delete item from current order
+      tags:
+      - orders
+  /orders/make:
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Confirm current order
+      tags:
+      - orders
+  /signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User object
+        in: body
+        name: userPrototype
+        required: true
+        schema:
+          $ref: '#/definitions/web_internal_models.UserPrototype'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: int
+      summary: Sign up
+      tags:
+      - auth
+  /validate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - default: token=xxx
+        description: token
+        in: header
+        name: Cookie
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web_internal_models.UserSwagger'
+      summary: validate auth
+      tags:
+      - auth
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
