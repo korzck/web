@@ -3,25 +3,29 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 	"web/internal/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
-	"github.com/swaggo/swag/example/celler/httputil"
+	swaggerUtils "github.com/swaggo/swag/example/celler/httputil"
 )
 
 // GetItems godoc
 // @Summary      Get list of all items
 // @Tags         items
-// @Param        min    query     string  false  "filter by min price"  Format(text)
-// @Param        max    query     string  false  "filter by max price"  Format(text)
+// @Param        min       	 query     string  false  "filter by min price"  Format(text)
+// @Param        max       	 query     string  false  "filter by max price"  Format(text)
+// @Param        title       query     string  false  "filter by title"  Format(text)
+// @Param        page    	 query     string  false  "page"  Format(text)
 // @Param        material    query     string  false  "filter by material (wood/metal)"  Format(text)
 // @Accept       json
 // @Produce      json
@@ -32,32 +36,69 @@ func (s *Service) GetItems(c *gin.Context) {
 	items := make([]models.Item, 0)
 	min := c.Request.URL.Query().Get("min")
 	max := c.Query("max")
+	title := c.Query("title")
+	page, _ := strconv.ParseInt(c.Query("page"), 10, 64)
 	material := c.Query("material")
 	log.Println(min, max, material)
 	query := s.db.DB.Where("deleted_at IS NULL")
 	if min != "" {
 		minNum, _ := strconv.ParseInt(min, 10, 64)
-		query.Where(`NULLIF(price, '')::int >= ?`, minNum)
+		query.Where(`price >= ?`, minNum)
 	}
 
 	if max != "" {
 		// log.Println("not empty max")
 		maxNum, _ := strconv.ParseInt(max, 10, 64)
-		query.Where(`NULLIF(price, '')::int <= ?`, maxNum)
+		query.Where(`price <= ?`, maxNum)
 	}
 	if material != "" {
 		query.Where(`type = ?`, material)
 	}
-	res := query.Find(&items)
+	if title != "" {
+		// q := fmt.Sprintf("title = '%%%v%%'", title)
+		query.Where(`title ilike ?`, "%"+title+"%")
+	}
+	if page == 0 {
+		page = 1
+	}
+
+	res := query.Order("id ASC").Offset(int(page-1) * 16).Limit(16).Find(&items)
 	if res.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error: ": res.Error.Error()})
 		return
 	}
+	length := struct {
+		Count uint64 `json:"count"`
+	}{}
+	query = s.db.DB.Where("deleted_at IS NULL").Model(&models.Item{})
+	if min != "" {
+		minNum, _ := strconv.ParseInt(min, 10, 64)
+		query.Where(`price >= ?`, minNum)
+	}
+	if max != "" {
+		maxNum, _ := strconv.ParseInt(max, 10, 64)
+		query.Where(`price <= ?`, maxNum)
+	}
+	if material != "" {
+		query.Where(`type = ?`, material)
+	}
+	if title != "" {
+		query.Where(`title ilike ?`, "%"+title+"%")
+	}
+	res = query.Select("count(*)").Find(&length)
+	if res.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error: ": res.Error.Error()})
+		return
+	}
+	// length, _ := res.Rows()
+	fmt.Println(length)
 	order := models.Order{}
 	s.db.DB.Where("user_id = ?", userId).Where("status = ?", "new").First(&order)
 	c.JSON(http.StatusOK, &models.ItemsSwagger{
-		Items:   items,
-		OrderId: uint64(order.Id),
+		Items:    items,
+		OrderId:  uint64(order.Id),
+		Length:   length.Count,
+		PageSize: 8,
 	})
 }
 
@@ -87,7 +128,7 @@ func (s *Service) LoadS3(c *gin.Context) {
 	contentType := form.File.Header["Content-Type"][0]
 	buffer, err := form.File.Open()
 	if err != nil {
-		httputil.NewError(c, http.StatusBadRequest, err)
+		swaggerUtils.NewError(c, http.StatusBadRequest, err)
 		return
 	}
 	s.minioClient.PutObject(context.Background(), "cnc", newFileName, buffer, form.File.Size, minio.PutObjectOptions{ContentType: contentType})
@@ -99,8 +140,9 @@ func (s *Service) LoadS3(c *gin.Context) {
 			Error: err.Error(),
 		})
 	}
+	linkPart := strings.Split(link.String(), "?")
 	c.JSON(http.StatusOK, models.ImageSwagger{
-		Link:  link.String(),
+		Link:  linkPart[0],
 		Error: "",
 	})
 }

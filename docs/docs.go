@@ -53,6 +53,20 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "format": "text",
+                        "description": "filter by title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "text",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "text",
                         "description": "filter by material (wood/metal)",
                         "name": "material",
                         "in": "query"
@@ -775,7 +789,13 @@ const docTemplate = `{
                         "$ref": "#/definitions/web_internal_models.Item"
                     }
                 },
+                "length": {
+                    "type": "integer"
+                },
                 "order_id": {
+                    "type": "integer"
+                },
+                "page_size": {
                     "type": "integer"
                 }
             }

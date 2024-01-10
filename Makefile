@@ -13,3 +13,11 @@ migrate-minio:
 .PHONY: gendoc
 gendoc:
 	~/go/bin/swag init -g cmd/main.go --parseDependency --parseInternal
+
+.PHONY: genitems
+genitems:
+	$(GOENV) python3 cmd/random_items/random_items.py $(RUN_ARGS)
+
+.PHONY: insgenit
+insgenit:
+	$(GOENV) go run cmd/random_items/main.go $(RUN_ARGS)

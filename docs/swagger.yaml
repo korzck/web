@@ -100,7 +100,11 @@ definitions:
         items:
           $ref: '#/definitions/web_internal_models.Item'
         type: array
+      length:
+        type: integer
       order_id:
+        type: integer
+      page_size:
         type: integer
     type: object
   web_internal_models.Order:
@@ -223,6 +227,16 @@ paths:
         format: text
         in: query
         name: max
+        type: string
+      - description: filter by title
+        format: text
+        in: query
+        name: title
+        type: string
+      - description: page
+        format: text
+        in: query
+        name: page
         type: string
       - description: filter by material (wood/metal)
         format: text

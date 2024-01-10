@@ -1,0 +1,16 @@
+database:
+  DB_HOST: localhost
+  DB_NAME: postgres
+  DB_PORT: 5432
+  DB_USER: konstantin.koretskiy
+  DB_PASS: 
+
+minio:
+  user: minioadmin
+  pass: minioadmin
+  endpoint: 127.0.0.1:9000
+
+redis:
+  host: localhost
+  port: 6379
+  password:

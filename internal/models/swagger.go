@@ -3,8 +3,10 @@ package models
 import "mime/multipart"
 
 type ItemsSwagger struct {
-	Items   []Item `json:"items"`
-	OrderId uint64 `json:"order_id"`
+	Items    []Item `json:"items"`
+	OrderId  uint64 `json:"order_id"`
+	Length   uint64 `json:"length"`
+	PageSize uint64 `json:"page_size"`
 }
 
 type UserSwagger struct {
