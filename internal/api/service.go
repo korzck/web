@@ -144,7 +144,7 @@ func (s *Service) Run() error {
 		})
 	}
 
-	r.Run("10.0.0.21:8080")
+	r.Run("192.168.160.14:8080")
 
 	log.Println("Server down")
 	return nil

@@ -98,7 +98,7 @@ func (s *Service) GetItems(c *gin.Context) {
 		Items:    items,
 		OrderId:  uint64(order.Id),
 		Length:   length.Count,
-		PageSize: 8,
+		PageSize: 16,
 	})
 }
 
