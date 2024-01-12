@@ -20,71 +20,79 @@ func GetItems() []*Item {
 	items := []*Item{
 		{
 			Type:     "metal",
-			Title:    "Metal welding",
-			Subtitle: "Welding with every type of alloys and forms",
+			Title:    "Сварка",
+			Subtitle: "Сварка всех типов сплавов и металлов",
 			Price:    "1",
 			ImgURL:   "/static/img/img1.jpeg",
-			Info:     "Metal welding is a process of joining two or more metallic pieces together using heat, pressure, or a combination of both. It involves melting the surfaces of the metals to be joined and allowing them to cool, creating a strong and durable bond. Welding is widely used in various industries, including manufacturing, construction, automotive, and aerospace, to create structures, repair metal components, and fabricate intricate designs. Different welding techniques, such as arc welding, MIG welding, TIG welding, and spot welding, are employed depending on the specific application and types of metals involved.",
+			Info: `
+			Наша компания специализируется на предоставлении услуг сварки всех типов сплавов и металлов. Мы обладаем богатым опытом и экспертизой в области сварки, и наша команда квалифицированных специалистов готова взяться за самые сложные проекты.
+
+Мы оснащены современным оборудованием, включая ЧПУ станки, которые обеспечивают высокую точность и качество сварочных работ. ЧПУ (числовое программное управление) позволяет нам создавать сварные конструкции по заданным точным спецификациям и чертежам. Это обеспечивает нам возможность работать с различными типами материалов, включая стали, нержавеющую сталь, алюминий, титан и другие сплавы.
+
+Мы ориентированы на удовлетворение потребностей наших клиентов и стараемся предоставлять услуги сварки высокого качества. Мы тщательно следим за соблюдением всех необходимых стандартов и процедур безопасности, чтобы гарантировать, что наши свар
+			`,
 		},
 		{
 			Type:     "metal",
-			Title:    "Metal milling",
-			Subtitle: "High speed milling for soft and hard metal forms",
+			Title:    "Выточка",
+			Subtitle: "Выточка и резка металлов",
 			Price:    "2",
 			ImgURL:   "/static/img/img2.jpeg",
 			Info:     "Metal milling, also known as machining or metal cutting, is a process used to shape and create complex parts or components from solid metal blocks. It involves removing material from the workpiece using rotating cutting tools, such as end mills or drills, to achieve the desired shape, size, and surface finish. The milling process can be performed manually or using computer numerical control (CNC) machines, allowing for precision and repeatability. Metal milling is commonly used in industries such as manufacturing, aerospace, automotive, and construction to produce components with tight tolerances and intricate geometries. It is a versatile and efficient method for creating a wide range of metal parts for various applications.  ",
 		},
 		{
 			Type:     "metal",
-			Title:    "3D metal molding",
-			Subtitle: "3D shaped molding with 0.8mm nozzle",
+			Title:    "3д формовка металла",
+			Subtitle: "3д формовка металла с высокоточными сверлами",
 			Price:    "3",
 			ImgURL:   "/static/img/img3.jpeg",
-			Info: `3D metal molding, also known as metal additive manufacturing or metal 3D printing, is an innovative manufacturing process that involves building three-dimensional metal objects layer by layer from a digital model. Unlike traditional metal molding techniques, which often involve subtractive processes like cutting or milling, 3D metal molding adds material layer by layer, allowing for complex geometries and internal structures that would be challenging or impossible to achieve using other methods.
+			Info: `
+			Выточка и резка металлов - это процессы обработки материала, которые играют важную роль в области металлообработки и машиностроения. Они позволяют создавать сложные детали и изделия из различных металлических материалов с высокой точностью и качеством.
 
-			In 3D metal molding, a powdered metal material, such as stainless steel, titanium, or aluminum, is selectively melted or fused together by a high-powered laser or electron beam. The laser or electron beam fuses the metal particles in the desired areas, creating a solid, fully dense metal part. This process is repeated layer by layer until the complete object is formed.
-			
-			3D metal molding offers numerous advantages, including greater design freedom, reduced material waste, faster production times, and the ability to create highly customized or intricate metal parts. It has found applications in various industries, including aerospace, automotive, medical, and jewelry, and continues to advance with new materials and improved technologies.  `,
+Выточка металлов является процессом удаления материала из обрабатываемой детали с использованием режущего инструмента, такого как токарный инструмент. Она часто применяется для создания различных валов, втулок, фланцев, резьбовых соединений и других компонентов, требующих точной формы и поверхностей. Выточка позволяет обрабатывать детали разного диаметра, длины и формы, в зависимости от потребностей проекта.
+
+Резка металлов, в свою очередь, представляет собой процесс разделения больших листов или пластин металла на более мелкие детали или заготовки. Существует несколько способов резки металла, включая лазерную резку, плазменную резку и газовую резку. Каждый метод обладает своими преимуществами и применяется в зависимости от толщины и типа металла, а также требований к точности и скорости резки.
+			`,
 		},
 		{
 			Type:     "metal",
-			Title:    "Metal engraving",
-			Subtitle: "Engraving with water cleaning supplies and high speed polishing",
+			Title:    "Гравировка по металлу",
+			Subtitle: "Гравировка по металлу и полировка",
 			Price:    "4",
 			ImgURL:   "/static/img/img4.jpeg",
-			Info: `Metal engraving is a process of etching or cutting designs, text, or patterns onto metal surfaces. It is a technique used to create permanent and detailed markings on various metals, such as stainless steel, aluminum, brass, or gold. 
+			Info: `
+			Гравировка по металлу и полировка - это два процесса, которые применяются для добавления уникальных дизайнов, маркировки и повышения эстетического качества металлических поверхностей.
 
-			There are different methods of metal engraving, including hand engraving, rotary engraving, and laser engraving. Hand engraving involves using special tools, such as gravers or burins, to manually carve into the metal surface. Rotary engraving uses a rotating cutting tool to engrave the desired design, while laser engraving utilizes a laser beam to vaporize or remove layers of the metal, creating precise and intricate engravings. 
-			
-			Metal engraving has numerous applications, including jewelry design, personalization of metal items, signage, industrial marking, and artwork. It allows for the creation of intricate and durable designs, adding a decorative or functional element to metal objects. In addition, advancements in laser technology have made metal engraving faster and more precise, further expanding its range of applications.  `,
+Гравировка по металлу - это процесс создания рельефных или фрезерных узоров, текстов или изображений на металлических поверхностях. Она может быть выполнена либо вручную с использованием ручных инструментов и станков, либо с помощью современных компьютеризированных систем гравировки. Гравировка может применяться для кастомизации ювелирных изделий, наружных знаков, металлических плиток, памятников, инструментов и многих других предметов. Она не только придает уникальный вид, но также может использоваться для идентификации и брендирования.
+
+Полировка металла - это процесс придания металлическим поверхностям гладкого блеска и удаления дефектов, таких как царапины, вмятины или окислы. Она может быть выполнена с использованием ручного инструмента, абразивных материалов или специальных полировальных машин. Полировка может применяться для улучшения внешнего вида и отделки металлических изделий, таких как ювелирные украшения, автомобильные детали, металлическая мебель, музыкальные инструменты и другие изделия. Она помогает создать поверхность, отражающую свет, и придает профессиональный и элегантный вид.
+			`,
 		},
 		{
 			Type:     "wood",
-			Title:    "Plywood and wood molding",
-			Subtitle: "Wood molding for any size pieces",
+			Title:    "Формовка дерева и фанеры",
+			Subtitle: "Формовка дерева и фанеры для болванок любых размеров",
 			Price:    "5",
 			ImgURL:   "/static/img/img5.jpeg",
-			Info: `Plywood is a type of engineered wood product made from thin layers or plies of wood veneers that are glued together in alternating directions. This cross-layered construction gives plywood its strength, stability, and resistance to warping. Plywood comes in various thicknesses, sizes, and grades, and it is widely used in construction, furniture making, cabinetry, and other woodworking applications.
+			Info: `
+			Наша компания предоставляет услуги по формовке дерева и фанеры для болванок любых размеров. Мы специализируемся на использовании компьютерно-числового управления (ЧПУ) станков, которые обеспечивают высокую точность и повторяемость процесса формовки.
 
-			Wood molding, also known as trim or moulding, refers to decorative or functional strips of wood used to add aesthetic and architectural detail to various surfaces. It is commonly used around windows, doors, ceilings, and floors to enhance the appearance of interior spaces. Wood molding can come in various profiles and styles, such as baseboard molding, crown molding, chair rail molding, and casing molding. It is typically installed using nails or adhesive, and it can be stained, painted, or left unfinished to suit the desired aesthetic.
-			
-			Both plywood and wood molding play vital roles in woodworking and construction. Plywood provides a versatile and strong material for structural applications, while wood molding adds visual appeal and character to finished spaces.  `,
+При формовке дерева и фанеры мы используем передовые технологии и инновационные методы, чтобы обеспечить высокий уровень качества и точности каждой болванки. Наши опытные специалисты проводят тщательный анализ и проектирование процесса формовки, чтобы достичь оптимальных результатов.
+
+Мы гордимся тем, что можем предложить нашим клиентам широкий спектр возможностей в формовке дерева и фанеры. Мы работаем с различными видами дерева, включая традиционные породы, такие как дуб, сосна и береза, а также экзотические и специальные виды дерева.
+			`,
 		},
 		{
 			Type:     "wood",
-			Title:    "Wood cutting",
-			Subtitle: "Wood cutting for any size pieces",
+			Title:    "Резка дерева и фанеры",
+			Subtitle: "Резка по дереву и фанеры для болванок любых размеров",
 			Price:    "6",
 			ImgURL:   "/static/img/img6.jpeg",
-			Info: `Wood cutting refers to the process of shaping or dividing wood into desired shapes, sizes, or pieces. It can be done through various methods, depending on the specific requirements and tools available.
+			Info: `
+			Резка по дереву и фанеры для болванок любых размеров – это процесс, который позволяет создавать высококачественные детали и заготовки из дерева и фанеры согласно индивидуальным требованиям заказчика.
 
-			One of the most common methods of wood cutting is sawing. Sawing can be done by hand using a handsaw or powered using circular saws, jigsaws, or table saws. Sawing allows for straight cuts, angled cuts, or curved cuts, depending on the type of saw and technique employed. It is suitable for both rough cutting and precise woodworking.
-			
-			Another method of wood cutting is woodturning, which involves rotating a piece of wood on a lathe and using cutting tools to shape it symmetrically. Woodturning is commonly used to create items such as table legs, bowls, or decorative pieces that require a rounded or cylindrical shape.
-			
-			Additionally, there are specialized wood cutting techniques such as scroll sawing, bandsawing, and CNC (Computer Numerical Control) routing. These methods provide precise and intricate cuts, allowing for detailed designs and patterns in woodwork.
-			
-			Wood cutting serves various purposes, ranging from construction and furniture making to crafting and woodworking hobbies. It is essential to use the appropriate cutting tool and technique for the desired results while considering safety precautions to ensure accurate and safe wood cutting.  `,
+Резка по дереву и фанеры выполняется с использованием специального оборудования, такого как станки с числовым программным управлением (ЧПУ), которые позволяют максимально точно и эффективно выполнять режущие операции. Следуя заданной программе, режущий инструмент проходит через материал, обеспечивая точные и четкие линии реза.
+			`,
 		},
 	}
 	return items
@@ -98,7 +106,7 @@ func InitPages(items []*Item) error {
 		<img class="image" src="{{ .Item.ImgURL }}">
 		<div class="text">{{ .Item.Info }}</div>
 		<div class="process">
-			<div class="button">Add to orders</div>
+			<div class="button">Добавить в заказ</div>
 			<br />
 			<p>Order details</p>
 			<textarea type="textarea" class="details-input"></textarea>
